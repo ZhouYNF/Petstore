@@ -1,6 +1,6 @@
 package com.nf147.pest.web;
 
-import com.nf147.pest.entity.PetstoreOrder;
+import com.nf147.pest.entity.Order;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class OrderConsole {
     @RequestMapping(value = "/sele",method = RequestMethod.POST)
     @ResponseBody
-    public String select(@RequestBody PetstoreOrder order){
+    public String select(@RequestBody Order order){
         System.out.println(order);
         return "";
     }
     @RequestMapping(value = "/seles",method = RequestMethod.POST)
-    public String selects(PetstoreOrder order, BindingResult br){
+    public String selects(Order order, BindingResult br){
         System.out.println(order);
         return "";
     }

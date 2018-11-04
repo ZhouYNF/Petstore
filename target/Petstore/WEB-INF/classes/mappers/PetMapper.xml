@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nf147.pest.dao.PetMapper">
+
+<sql  id="sanbiao">
+       petstore_Pet pet left join petstore_Category cat on pet.pet_category_id = cat.cg_id
+   left join petstore_Tag tag on pet.pet_tags_id = tag.Tag_id;
+   </sql>
+  <resultMap id="BaseResultMap" type="com.nf147.pest.entity.Pet">
+    <id column="pet_id" jdbcType="INTEGER" property="pet_id" />
+    <result column="pet_category_id" jdbcType="INTEGER" property="pet_category_id" />
+    <result column="pet_name" jdbcType="VARCHAR" property="pet_name" />
+    <result column="pet_photoUrls" jdbcType="VARCHAR" property="pet_photoUrls" />
+    <result column="pet_tags_id" jdbcType="INTEGER" property="pet_tags_id" />
+    <result column="pet_status" jdbcType="VARCHAR" property="pet_status" />
+  </resultMap>
+
+    <resultMap id="rePet" type="com.nf147.pest.entity.Pet" autoMapping="true">
+        <association property="com.nf147.pest.entity.Category" resultMap="recategory"/>
+        <association property="com.nf147.pest.entity.Tag" javaType="com.nf147.pest.entity.Tag" autoMapping="true"/>
+    </resultMap>
+
+    <resultMap id="recategory" type="com.nf147.pest.entity.Category" autoMapping="true">
+        <collection property="com.nf147.pest.entity.Pet" ofType="com.nf147.pest.entity.Pet" resultMap="rePet"/>
+    </resultMap>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from petstore_pet
+    where pet_id = #{pet_id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.nf147.pest.entity.Pet">
+    insert into petstore_pet
+    (pet_id, pet_category_id, pet_name,
+      pet_photoUrls, pet_tags_id, pet_status
+    )
+    values
+    (#{pet_id,jdbcType=INTEGER},
+    #{pet_category_id,jdbcType=INTEGER},
+    #{pet_name,jdbcType=VARCHAR},
+    #{pet_photoUrls,jdbcType=VARCHAR},
+    #{pet_tags_id,jdbcType=INTEGER},
+    #{pet_status,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.nf147.pest.entity.Pet">
+    update petstore_pet
+    set pet_category_id = #{pet_category_id,jdbcType=INTEGER},
+      pet_name = #{pet_name,jdbcType=VARCHAR},
+      pet_photoUrls = #{pet_photoUrls,jdbcType=VARCHAR},
+      pet_tags_id = #{pet_tags_id,jdbcType=INTEGER},
+      pet_status = #{pet_status,jdbcType=VARCHAR}
+    where pet_id = #{pet_id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select pet_id, pet_category_id, pet_name, pet_photoUrls, pet_tags_id, pet_status
+    from petstore_pet
+    where pet_id = #{pet_id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAll" resultMap="rePet">
+   select
+    pet.pet_id
+    pet.pet_category_id
+    pet.pet_name
+    pet.pet_photoUrls
+    pet.pet_tags_id
+    pet.pet_status
+   from
+   petstore_Pet pet left join petstore_Category cat on pet.pet_category_id = cat.cg_id
+   left join petstore_Tag tag on pet.pet_tags_id = tag.Tag_id;
+  </select>
+</mapper>

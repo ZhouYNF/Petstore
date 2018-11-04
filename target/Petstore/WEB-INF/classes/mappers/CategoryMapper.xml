@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nf147.pest.dao.CategoryMapper">
+  <resultMap id="BaseResultMap" type="com.nf147.pest.entity.Category">
+    <id column="cg_id" jdbcType="INTEGER" property="cg_id" />
+    <result column="cg_name" jdbcType="VARCHAR" property="cg_name" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from petstore_category
+    where cg_id = #{cg_id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.nf147.pest.entity.Category">
+    insert into petstore_category (cg_id, cg_name)
+    values (#{cg_id,jdbcType=INTEGER}, #{cg_name,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.nf147.pest.entity.Category">
+    update petstore_category
+    set cg_name = #{cg_name,jdbcType=VARCHAR}
+    where cg_id = #{cg_id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select cg_id, cg_name
+    from petstore_category
+    where cg_id = #{cg_id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select cg_id, cg_name
+    from petstore_category
+  </select>
+</mapper>

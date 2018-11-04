@@ -1,13 +1,11 @@
 package com.nf147.pest.web;
 
-import com.nf147.pest.dao.PetstorePetMapper;
-import com.nf147.pest.entity.PetstorePet;
+import com.nf147.pest.dao.PetMapper;
+import com.nf147.pest.entity.Apiresponse;
+import com.nf147.pest.entity.Pet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,30 +14,105 @@ import java.util.List;
 public class PetConsole {
 
     @Autowired
-    private PetstorePetMapper petMapper;
+    PetMapper petMapper;
 
-    @RequestMapping(value = "/home_page",method = RequestMethod.GET)
-    public String home_page ( Model model) {
-        List<PetstorePet> petList = petMapper.selectAll() ;
-        model.addAttribute("petList", petList);
-        return "home_page";
+
+    @PostMapping
+    @ResponseBody
+    public Apiresponse addPet(Pet pet) {
+        if (petMapper.insert(pet) != 0) {
+            return new Apiresponse();
+        } else {
+            return new Apiresponse();
+        }
     }
-    @RequestMapping(value = "/findByStatus",method = RequestMethod.GET)
-    public String findByStatus(){
-        return "";
+
+
+    @PutMapping
+    @ResponseBody
+    public Apiresponse updatePet(Pet pet) {
+        if (pet.getPet_id() == null) {
+            if (petMapper.selectByPrimaryKey(pet.getPet_id()) != null) {
+                if (petMapper.updateByPrimaryKey(pet) != 0) {
+                    return new Apiresponse();
+                } else {
+                    return new Apiresponse();
+                }
+            } else {
+                return new Apiresponse();
+            }
+        } else {
+            return new Apiresponse();
+        }
     }
-    @RequestMapping(value = "/{petId}",method = RequestMethod.GET)
-    public String getpetId(@PathVariable("petId") int petId){
-        return "";
+
+    @GetMapping("/findByStatus")
+    @ResponseBody
+    public Apiresponse findByStatus(Pet pet) {
+        List<Pet> list = null;
+        if (pet.getPet_status() == null || pet.getPet_status().isEmpty()) {
+            return new Apiresponse();
+        } else {
+            list = petMapper.selectByStatus(pet.getPet_status());
+            if (list == null) {
+                return new Apiresponse();
+            } else {
+                return new Apiresponse();
+            }
+        }
     }
-    @RequestMapping(value = "/{petId}",method = RequestMethod.POST)
-    public String postpetId(@PathVariable("petId") int petId){
-        return "";
+
+    @GetMapping("/{petId}")
+    @ResponseBody
+    public Apiresponse findById(@PathVariable int petId) {
+        if (petId == 0) {
+            return new Apiresponse();
+        } else {
+            if (petMapper.selectByPrimaryKey(petId) != null) {
+                return new Apiresponse();
+            } else {
+                return new Apiresponse();
+            }
+        }
     }
-    @RequestMapping(value = "/{petId}",method = RequestMethod.DELETE)
-    public String delpetId(@PathVariable("petId") int petId){
-        return "";
+
+    @PostMapping("/{petId}")
+    @ResponseBody
+    public Apiresponse updateById(@PathVariable int petId, Pet pet) {
+        if (petId == 0) {
+            return new Apiresponse();
+        } else {
+            petMapper.updateByPrimaryKey(pet);
+            return new Apiresponse();
+        }
     }
+
+    @DeleteMapping("/{petId}")
+    @ResponseBody
+    public Apiresponse delById(@PathVariable int petId) {
+        Pet pet = new Pet();
+        pet.setPet_id(petId);
+        if (petMapper.selectByPrimaryKey(pet.getPet_id()) == null) {
+            return new Apiresponse();
+        } else {
+            if (petMapper.deleteByPrimaryKey(petId) == 0) {
+                return new Apiresponse();
+            } else {
+                return new Apiresponse();
+            }
+        }
+    }
+
+    @PostMapping("/{petId}/uploadImage")
+    @ResponseBody
+    public Apiresponse uploadImage(@PathVariable int petId, Pet pet) {
+        if (petMapper.updateByPrimaryKey(pet) != 0) {
+            return new Apiresponse();
+        }
+        return new Apiresponse();
+    }
+
+
 
 
 }
