@@ -27,4 +27,5 @@
     select Tag_id, Tag_name
     from petstore_tag
   </select>
+
 </mapper>

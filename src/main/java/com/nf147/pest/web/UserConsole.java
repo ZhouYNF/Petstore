@@ -49,13 +49,13 @@ public class UserConsole {
         return "login";
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login2")
     @ResponseBody
     public Apiresponse login(int user_id,String user_password) {
         if (userMapper.login(new User(user_id,user_password)) == null) {
             return new Apiresponse();
         } else {
-            return new Apiresponse();
+            return new Apiresponse(200,"success","");
         }
     }
 

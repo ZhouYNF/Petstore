@@ -21,5 +21,11 @@ public class Category {
         this.cg_name = cg_name == null ? null : cg_name.trim();
     }
 
-
+    @Override
+    public String toString() {
+        return "Category{" +
+                "cg_id=" + cg_id +
+                ", cg_name='" + cg_name + '\'' +
+                '}';
+    }
 }

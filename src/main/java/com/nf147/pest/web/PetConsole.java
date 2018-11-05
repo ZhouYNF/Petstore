@@ -1,23 +1,29 @@
 package com.nf147.pest.web;
 
+import com.nf147.pest.dao.CategoryMapper;
 import com.nf147.pest.dao.PetMapper;
 import com.nf147.pest.entity.Apiresponse;
+import com.nf147.pest.entity.Category;
 import com.nf147.pest.entity.Pet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
 @Controller
-@RequestMapping("/emp")
+@RequestMapping("/pet")
 public class PetConsole {
 
     @Autowired
     PetMapper petMapper;
 
+    @Autowired
+    CategoryMapper categoryMapper;
 
-    @PostMapping
+
+    @PostMapping("/addPet")
     @ResponseBody
     public Apiresponse addPet(Pet pet) {
         if (petMapper.insert(pet) != 0) {
@@ -27,8 +33,25 @@ public class PetConsole {
         }
     }
 
+    @GetMapping("/page")
+    public ModelAndView petAll() {
+        ModelAndView mv = new ModelAndView("home_page");
+        List <Pet> petList = petMapper.selectAll();
+        List <Category> categoryList = categoryMapper.selectAll();
+        mv.addObject("petList",petList);
+        mv.addObject("categoryList",categoryList);
+        return mv;
+    };
 
-    @PutMapping
+    @GetMapping("/category")
+    public String getCategoryKey(int id){
+        ModelAndView mv = new ModelAndView("home_page");
+        List<Pet> petList= petMapper.getCategoryKey(id);
+        mv.addObject("petList",petList);
+        return "home_page";
+    }
+
+    @PutMapping("/update")
     @ResponseBody
     public Apiresponse updatePet(Pet pet) {
         if (pet.getPet_id() == null) {
@@ -49,7 +72,7 @@ public class PetConsole {
     @GetMapping("/findByStatus")
     @ResponseBody
     public Apiresponse findByStatus(Pet pet) {
-        List<Pet> list = null;
+        List <Pet> list = null;
         if (pet.getPet_status() == null || pet.getPet_status().isEmpty()) {
             return new Apiresponse();
         } else {
@@ -87,7 +110,7 @@ public class PetConsole {
         }
     }
 
-    @DeleteMapping("/{petId}")
+    @GetMapping("/del/{petId}")
     @ResponseBody
     public Apiresponse delById(@PathVariable int petId) {
         Pet pet = new Pet();
@@ -111,8 +134,6 @@ public class PetConsole {
         }
         return new Apiresponse();
     }
-
-
 
 
 }

@@ -15,4 +15,6 @@ public interface PetMapper {
     int updateByPrimaryKey(Pet record);
 
     List<Pet> selectByStatus(String status);
+
+    List<Pet> getCategoryKey(int id );
 }
